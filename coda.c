@@ -28,7 +28,7 @@ int enqueue(struct struttura_coda* head, char * opzione)
 
 	if (!is_valid_list(head))
 	{
-		printf("Errore, testa della lista uguale a null");
+		//printf("Errore, testa della lista uguale a null");
 		return 0;
 	}
 
@@ -70,7 +70,7 @@ char * dequeue(struct struttura_coda* head)
 	}
 	if(is_empty_list(head))
 	{
-		//printf("LISTA VUOTA!");
+		////printf("LISTA VUOTA!");
 		return NULL;
 	}
 	else
@@ -101,7 +101,7 @@ char * dequeue(struct struttura_coda* head)
 			}
 			free(tmp);
 		}
-		//printf("ho eliminato il comando dalla lista, ritorno la stringa:%s\n",comando_scodato);
+		////printf("ho eliminato il comando dalla lista, ritorno la stringa:%s\n",comando_scodato);
 		//return comando_scodato;
 		return comando_scodato;
 	}
@@ -120,7 +120,7 @@ char * rimuovi(struct struttura_coda* head, char * opzione)
 
     if(is_empty_list(head))
     {
-		//printf("Tentativo di eliminazione testa da lista vuota\n");
+		////printf("Tentativo di eliminazione testa da lista vuota\n");
     	return NULL;
 	}
 	else
@@ -141,10 +141,10 @@ char * rimuovi(struct struttura_coda* head, char * opzione)
         {
         	if (nodo_da_rimuovere == head)
         	{ /* se il nodo da rimuovere � il primo della lista in pratica � come fare una dequeue */
-        		//printf("rimuovo nodo in testa\n");
+        		////printf("rimuovo nodo in testa\n");
         		dequeue(head);
         		return opzione;
-        		//printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
+        		////printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
         	}
         	else
         	{
@@ -158,7 +158,7 @@ char * rimuovi(struct struttura_coda* head, char * opzione)
         		}
         		free(nodo_da_rimuovere);
         		return opzione;
-        		//printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
+        		////printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
 
 
         	}
@@ -178,23 +178,23 @@ void StampaLista(struct struttura_coda* head)
 	if (!is_valid_list(head))
 	{
 		// tirare errore se head = null
-		printf("Errore Stampa Lista");
+		//printf("Errore Stampa Lista");
 		exit(1);
 	}
 
     if(is_empty_list(head))
     {
-		printf("Lista vuota\n");
+		//printf("Lista vuota\n");
 	}
 	else
 	{
-		printf("Lista:");
+		//printf("Lista:");
 		while (temp != NULL)
 		{
-		  printf(" %s", temp->opzione);
+		  //printf(" %s", temp->opzione);
 		  temp = temp->next;
 		}
-		printf("\n");
+		//printf("\n");
 	}
 }
 
@@ -205,7 +205,7 @@ int size(struct struttura_coda* head)
 	if (!is_valid_list(head))
 	{
 		// tirare errore se head = null
-		printf("Errore Size Coda\n");
+		//printf("Errore Size Coda\n");
 		exit(1);
 	}
 
@@ -268,7 +268,7 @@ int enqueue_Interi(struct codaInteri* head, int fileDescriptor)
 	if (!is_valid_list_Interi(head))
 	{
 		perror("Errore, testa della lista uguale a null");
-		return 0;
+		return -5;
 	}
 
 	if(is_empty_list_Interi(head))
@@ -276,38 +276,48 @@ int enqueue_Interi(struct codaInteri* head, int fileDescriptor)
 		head->fileDescriptor = fileDescriptor;
 		head->prec = NULL;
 		head->next = NULL;
-		//printf("Aggiunto alla coda cliente %d\n", cliente->idCliente);
+		////printf("Aggiunto alla coda cliente %d\n", cliente->idCliente);
 		return 1;
     }
     else
     {
     	struct codaInteri *nodoCorrente=head;
-        while(nodoCorrente->next != NULL)
-        {
-			nodoCorrente=nodoCorrente->next;
-		}
-        //printf("MALLOC Nodo Coda\n");
-        struct codaInteri* nodo_successivo = malloc(sizeof(struct codaInteri));
-        nodo_successivo->fileDescriptor = fileDescriptor;
-        nodo_successivo->next = NULL;
-		nodoCorrente->next=nodo_successivo;
-		nodo_successivo->prec = nodoCorrente;
-		//printf("Aggiunto alla coda cliente %d\n", cliente->idCliente);
+    	if(nodoCorrente->fileDescriptor==-1)
+    	{
+    		nodoCorrente->fileDescriptor=fileDescriptor;
+    	}
+    	else
+    	{
+    		while(nodoCorrente->next != NULL)
+    		{
+    			nodoCorrente=nodoCorrente->next;
+    		}
+    		////printf("MALLOC Nodo Coda\n");
+    		struct codaInteri* nodo_successivo = malloc(sizeof(struct codaInteri));
+    		nodo_successivo->fileDescriptor = fileDescriptor;
+    		nodo_successivo->next = NULL;
+    		nodoCorrente->next=nodo_successivo;
+    		nodo_successivo->prec = nodoCorrente;
+
+    	}
+        		////printf("Aggiunto alla coda cliente %d\n", cliente->idCliente);
 		return 1;
     }
 }
 
 
-int dequeue_Interi(struct codaInteri* head)
+int dequeue_Interi(struct codaInteri* head, int *errore)
 {
 	if (!is_valid_list_Interi(head))
 	{
 		perror("Errore! head == NULL");
-		exit(1);
+		*errore=1;
+		return -1;
 	}
 	if(is_empty_list_Interi(head))
 	{
 		return -1;
+		*errore=1;
 	}
 	else
 	{
@@ -336,7 +346,7 @@ int dequeue_Interi(struct codaInteri* head)
 			}
 			free(tmp);
 		}
-		//printf("Scodato cliente: %d\n", cliente_scodato->idCliente);
+		////printf("Scodato cliente: %d\n", cliente_scodato->idCliente);
 		return cliente_scodato;
 	}
 }
@@ -345,7 +355,7 @@ int rimuovi_Interi(struct codaInteri* head, int idCliente)
 {
 	struct codaInteri* temp;
 	struct codaInteri* nodo_da_rimuovere = NULL;
-
+int prova=0;
 	if (!is_valid_list_Interi(head))
 	{
 		perror("Errore! head == NULL");
@@ -354,7 +364,7 @@ int rimuovi_Interi(struct codaInteri* head, int idCliente)
 
     if(is_empty_list_Interi(head))
     {
-		//printf("Tentativo di eliminazione testa da lista vuota\n");
+		////printf("Tentativo di eliminazione testa da lista vuota\n");
     	return -1;
 	}
 	else
@@ -375,10 +385,10 @@ int rimuovi_Interi(struct codaInteri* head, int idCliente)
         {
         	if (nodo_da_rimuovere == head)
         	{ /* se il nodo da rimuovere � il primo della lista in pratica � come fare una dequeue */
-        		//printf("rimuovo nodo in testa\n");
-        		dequeue_Interi(head);
+        		////printf("rimuovo nodo in testa\n");
+        		dequeue_Interi(head,&prova);
         		return idCliente;
-        		//printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
+        		////printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
         	}
         	else
         	{
@@ -392,7 +402,7 @@ int rimuovi_Interi(struct codaInteri* head, int idCliente)
         		}
         		free(nodo_da_rimuovere);
         		return idCliente;
-        		//printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
+        		////printf("Il cliente con id: %d si è spostato di cassa\n", nodo_da_rimuovere->cliente->idCliente);
 
 
         	}
@@ -407,10 +417,11 @@ int rimuovi_Interi(struct codaInteri* head, int idCliente)
 
 void StampaLista_Interi(struct codaInteri* head)
 {
+	printf("\n\n");
 	struct codaInteri *temp = head;
 	if (!is_valid_list_Interi(head)){
 		// tirare errore se head = null
-		printf("Errore Stampa Lista");
+		//printf("Errore Stampa Lista");
 		exit(1);
 	}
 
@@ -426,7 +437,7 @@ void StampaLista_Interi(struct codaInteri* head)
 		  printf(" %d", temp->fileDescriptor);
 		  temp = temp->next;
 		}
-		printf("\n");
+		printf("\n\n");
 	}
 }
 
@@ -437,7 +448,7 @@ int size_Interi(struct codaInteri* head)
 	if (!is_valid_list_Interi(head))
 	{
 		// tirare errore se head = null
-		printf("Errore Size Coda\n");
+		//printf("Errore Size Coda\n");
 		exit(1);
 	}
 
